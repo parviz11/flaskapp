@@ -1,7 +1,7 @@
 from flask import Flask, request, jsonify
 import pickle
 
-app = Flask(__name)
+app = Flask(__name__)
 
 # Define a list of valid API keys
 with open('app/api_keys.txt') as f:
@@ -13,8 +13,26 @@ with open("app/model/lg_pipeline.pkl", "rb") as model_file:
     model = pickle.load(model_file)
 model_file.close()
 
+@app.route('/health', methods=['GET'])
+def health_check():
+    """
+    Endpoint for health checks.
+
+    Returns:
+        jsonify: A JSON response indicating the health status of the application.
+    """
+    # Perform health checks here
+    # Return a 200 OK response if the app is healthy
+    return jsonify({"status": "healthy"})
+
 @app.route('/predict', methods=['POST'])
 def predict():
+    """
+    Endpoint for making predictions.
+
+    Returns:
+        jsonify: A JSON response containing the prediction result.
+    """
     try:
         # Check if the API key is included in the request headers
         api_key = request.headers.get('X-API-Key')
@@ -36,11 +54,6 @@ def predict():
     except Exception as e:
         return jsonify({"error": str(e)}), 500
 
-@app.route('/health', methods=['GET'])
-def health_check():
-    # Perform health checks here
-    # Return a 200 OK response if the app is healthy
-    return jsonify({"status": "healthy"})
 
 if __name__ == '__main__':
     app.run(debug=True)

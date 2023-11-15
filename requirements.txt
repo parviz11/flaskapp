@@ -4,3 +4,4 @@ scikit-optimize==0.9.0
 scipy
 numpy
 flask
+gunicorn
