@@ -1,5 +1,6 @@
 from flask import Flask, request, jsonify
 import pickle
+import pandas as pd
 
 app = Flask(__name__)
 
@@ -7,6 +8,12 @@ app = Flask(__name__)
 with open('app/api_keys.txt') as f:
     valid_api_keys = f.readlines()
 f.close()
+
+# Columns used in scoring
+with open('app/data/column_names.txt') as f:
+    columns = f.readlines()
+f.close()
+cols = columns[0].split(',')
 
 # Load the trained model
 with open("app/model/lg_pipeline.pkl", "rb") as model_file:
@@ -46,8 +53,11 @@ def predict():
             return jsonify({"error": "Invalid JSON data received."}), 400
 
         # Perform data preprocessing if necessary
+        # Convert the received data into a DataFrame
+        input_data = pd.DataFrame(data, columns=cols,index=[0])
+
         # Make predictions using your scikit-learn model
-        prediction = model.predict_proba(data)
+        prediction = model.predict_proba(input_data)
 
         return jsonify({"prediction": prediction.tolist()})
 
