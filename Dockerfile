@@ -5,7 +5,7 @@ WORKDIR /code
 
 COPY ./requirements.txt /code/requirements.txt
 
-COPY ./startup.sh /code/startup.sh
+#COPY ./startup.sh /code/startup.sh # This command might be required if deployed on Azure.
 
 RUN pip install --no-cache-dir --upgrade -r /code/requirements.txt
 
