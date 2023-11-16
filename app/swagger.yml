@@ -1,0 +1,188 @@
+swagger: '2.0'
+info:
+  title: Scoring App
+  description: API documentation for Scoring App
+  version: '1.0'
+paths:
+  /health:
+    get:
+      summary: Health Check
+      responses:
+        '200':
+          description: A JSON response indicating the health status of the application.
+          schema:
+            type: object
+            properties:
+              status:
+                type: string
+                description: The health status of the application.
+  /predict:
+    post:
+      summary: Make Predictions
+      parameters:
+        - in: header
+          name: X-API-Key
+          type: string
+          required: true
+        - in: body
+          name: body
+          schema:
+            type: object
+            properties:
+              uuid:
+                type: string
+                description: The unique identifier
+              default:
+                type: number
+                format: double
+                description: The default value
+              account_amount_added_12_24m:
+                type: integer
+                description: Account amount added in the last 12-24 months
+              account_days_in_dc_12_24m:
+                type: number
+                format: double
+                description: Account days in DC in the last 12-24 months
+              account_days_in_rem_12_24m:
+                type: number
+                format: double
+                description: Account days in rem in the last 12-24 months
+              account_days_in_term_12_24m:
+                type: number
+                format: double
+                description: Account days in term in the last 12-24 months
+              account_incoming_debt_vs_paid_0_24m:
+                type: number
+                format: double
+                description: Account incoming debt vs. paid in the last 0-24 months
+              account_status:
+                type: number
+                format: double
+                description: Account status
+              account_worst_status_0_3m:
+                type: number
+                format: double
+                description: Account worst status in the last 0-3 months
+              account_worst_status_12_24m:
+                type: number
+                format: double
+                description: Account worst status in the last 12-24 months
+              account_worst_status_3_6m:
+                type: number
+                format: double
+                description: Account worst status in the last 3-6 months
+              account_worst_status_6_12m:
+                type: number
+                format: double
+                description: Account worst status in the last 6-12 months
+              age:
+                type: integer
+                description: The age
+              avg_payment_span_0_12m:
+                type: number
+                format: double
+                description: Average payment span in the last 0-12 months
+              avg_payment_span_0_3m:
+                type: number
+                format: double
+                description: Average payment span in the last 0-3 months
+              merchant_category:
+                type: string
+                description: The merchant category
+              merchant_group:
+                type: string
+                description: The merchant group
+              has_paid:
+                type: boolean
+                description: Indicates whether the payment has been made
+              max_paid_inv_0_12m:
+                type: number
+                format: double
+                description: Maximum paid invoice in the last 0-12 months
+              max_paid_inv_0_24m:
+                type: number
+                format: double
+                description: Maximum paid invoice in the last 0-24 months
+              name_in_email:
+                type: string
+                description: The name in the email
+              num_active_div_by_paid_inv_0_12m:
+                type: number
+                format: double
+                description: Number of active div by paid invoice in the last 0-12 months
+              num_active_inv:
+                type: integer
+                description: Number of active invoices
+              num_arch_dc_0_12m:
+                type: integer
+                description: Number of archived DC in the last 0-12 months
+              num_arch_dc_12_24m:
+                type: integer
+                description: Number of archived DC in the last 12-24 months
+              num_arch_ok_0_12m:
+                type: integer
+                description: Number of archived OK in the last 0-12 months
+              num_arch_ok_12_24m:
+                type: integer
+                description: Number of archived OK in the last 12-24 months
+              num_arch_rem_0_12m:
+                type: integer
+                description: Number of archived REM in the last 0-12 months
+              num_arch_written_off_0_12m:
+                type: number
+                format: double
+                description: Number of archived written off in the last 0-12 months
+              num_arch_written_off_12_24m:
+                type: number
+                format: double
+                description: Number of archived written off in the last 12-24 months
+              num_unpaid_bills:
+                type: integer
+                description: Number of unpaid bills
+              status_last_archived_0_24m:
+                type: integer
+                description: Status last archived in the last 0-24 months
+              status_2nd_last_archived_0_24m:
+                type: integer
+                description: Status 2nd last archived in the last 0-24 months
+              status_3rd_last_archived_0_24m:
+                type: integer
+                description: Status 3rd last archived in the last 0-24 months
+              status_max_archived_0_6_months:
+                type: integer
+                description: Status max archived in the last 0-6 months
+              status_max_archived_0_12_months:
+                type: integer
+                description: Status max archived in the last 0-12 months
+              status_max_archived_0_24_months:
+                type: integer
+                description: Status max archived in the last 0-24 months
+              recovery_debt:
+                type: integer
+                description: Recovery debt
+              sum_capital_paid_account_0_12m:
+                type: integer
+                description: Sum capital paid account in the last 0-12 months
+              sum_capital_paid_account_12_24m:
+                type: integer
+                description: Sum capital paid account in the last 12-24 months
+              sum_paid_inv_0_12m:
+                type: integer
+                description: Sum paid invoice in the last 0-12 months
+              time_hours:
+                type: number
+                format: double
+                description: Time hours
+              worst_status_active_inv:
+                type: number
+                format: double
+                description: Worst status active invoice
+      responses:
+        '200':
+          description: A JSON response containing the prediction result.
+          schema:
+            type: object
+            properties:
+              prediction:
+                type: array
+                description: The predicted probabilities

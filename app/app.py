@@ -1,8 +1,10 @@
 from flask import Flask, request, jsonify
 import pickle
 import pandas as pd
+from flasgger import Swagger
 
 app = Flask(__name__)
+Swagger(app, template_file='swagger.yml')
 
 # Define a list of valid API keys
 with open('app/api_keys.txt') as f:
@@ -25,8 +27,7 @@ def health_check():
     """
     Endpoint for health checks.
 
-    Returns:
-        jsonify: A JSON response indicating the health status of the application.
+    A JSON response indicating the health status of the application.
     """
     # Perform health checks here
     # Return a 200 OK response if the app is healthy
@@ -52,11 +53,10 @@ def predict():
         if data is None:
             return jsonify({"error": "Invalid JSON data received."}), 400
 
-        # Perform data preprocessing if necessary
         # Convert the received data into a DataFrame
         input_data = pd.DataFrame(data, columns=cols,index=[0])
 
-        # Make predictions using your scikit-learn model
+        # Make predictions using scikit-learn model
         prediction = model.predict_proba(input_data)
 
         return jsonify({"prediction": prediction.tolist()})
