@@ -25,12 +25,14 @@ paths:
       responses:
         '200':
           description: A JSON response indicating the health status of the application.
-          schema:
-            type: object
-            properties:
-              status:
-                type: string
-                description: The health status of the application.
+          content:
+            /application.json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    description: The health status of the application.
   /predict:
     post:
       tags:
@@ -38,24 +40,34 @@ paths:
       summary: Make Predictions
       description: Enter a valid API key to access the API.
       parameters:
-        - in: header
-          name: X-API-Key
-          type: string
+        - name: X-API-Key
+          in: header
           required: true
-        - in: body
-          name: body
           schema:
-            $ref: '#/components/schemas/Predict'
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Predict'
+            examples:
+              example1:
+                $ref: '#/components/schemas/Predict/examples/example1'
+              example2:
+                $ref: '#/components/schemas/Predict/examples/example2'
               
       responses:
         '200':
           description: A JSON response containing the prediction result.
-          schema:
-            type: object
-            properties:
-              prediction:
-                type: array
-                description: The predicted probabilities
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  prediction:
+                    type: array
+                    description: The predicted probabilities
 components:
   schemas:
     Predict:
@@ -209,9 +221,94 @@ components:
           type: number
           format: double
           description: Worst status active invoice
-  requestBodies:
-    Predict:
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Predict'
+      examples:
+        example1:
+          value:
+            uuid: "123abc"
+            default: 10.5
+            account_amount_added_12_24m: 100
+            account_days_in_dc_12_24m: 10.5
+            account_days_in_rem_12_24m: 20.5
+            account_days_in_term_12_24m: 15.0
+            account_incoming_debt_vs_paid_0_24m: 0.8
+            account_status: 1.0
+            account_worst_status_0_3m: 0.5
+            account_worst_status_12_24m: 0.2
+            account_worst_status_3_6m: 0.3
+            account_worst_status_6_12m: 0.4
+            age: 35
+            avg_payment_span_0_12m: 5.0
+            avg_payment_span_0_3m: 3.0
+            merchant_category: "Retail"
+            merchant_group: "Group A"
+            has_paid: true
+            max_paid_inv_0_12m: 150.0
+            max_paid_inv_0_24m: 200.0
+            name_in_email: "John Doe"
+            num_active_div_by_paid_inv_0_12m: 2.0
+            num_active_inv: 3
+            num_arch_dc_0_12m: 1
+            num_arch_dc_12_24m: 2
+            num_arch_ok_0_12m: 3
+            num_arch_ok_12_24m: 4
+            num_arch_rem_0_12m: 5
+            num_arch_written_off_0_12m: 0.5
+            num_arch_written_off_12_24m: 1.0
+            num_unpaid_bills: 2
+            status_last_archived_0_24m: 1
+            status_2nd_last_archived_0_24m: 2
+            status_3rd_last_archived_0_24m: 3
+            status_max_archived_0_6_months: 1
+            status_max_archived_0_12_months: 2
+            status_max_archived_0_24_months: 3
+            recovery_debt: 200
+            sum_capital_paid_account_0_12m: 300
+            sum_capital_paid_account_12_24m: 400
+            sum_paid_inv_0_12m: 500
+            time_hours: 8.0
+            worst_status_active_inv: 0.1
+        example2:
+          value:
+            uuid: "456def"
+            default: 15.0
+            account_amount_added_12_24m: 200
+            account_days_in_dc_12_24m: 15.0
+            account_days_in_rem_12_24m: 25.0
+            account_days_in_term_12_24m: 20.0
+            account_incoming_debt_vs_paid_0_24m: 0.7
+            account_status: 0.8
+            account_worst_status_0_3m: 0.4
+            account_worst_status_12_24m: 0.3
+            account_worst_status_3_6m: 0.2
+            account_worst_status_6_12m: 0.1
+            age: 40
+            avg_payment_span_0_12m: 6.0
+            avg_payment_span_0_3m: 4.0
+            merchant_category: "Technology"
+            merchant_group: "Group B"
+            has_paid: false
+            max_paid_inv_0_12m: 180.0
+            max_paid_inv_0_24m: 250.0
+            name_in_email: "Jane Doe"
+            num_active_div_by_paid_inv_0_12m: 2.5
+            num_active_inv: 4
+            num_arch_dc_0_12m: 2
+            num_arch_dc_12_24m: 3
+            num_arch_ok_0_12m: 4
+            num_arch_ok_12_24m: 5
+            num_arch_rem_0_12m: 6
+            num_arch_written_off_0_12m: 0.7
+            num_arch_written_off_12_24m: 1.5
+            num_unpaid_bills: 3
+            status_last_archived_0_24m: 2
+            status_2nd_last_archived_0_24m: 3
+            status_3rd_last_archived_0_24m: 4
+            status_max_archived_0_6_months: 2
+            status_max_archived_0_12_months: 3
+            status_max_archived_0_24_months: 4
+            recovery_debt: 250
+            sum_capital_paid_account_0_12m: 350
+            sum_capital_paid_account_12_24m: 450
+            sum_paid_inv_0_12m: 550
+            time_hours: 10.0
+            worst_status_active_inv: 0.2

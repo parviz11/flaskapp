@@ -4,6 +4,7 @@ import pandas as pd
 from flasgger import Swagger
 
 app = Flask(__name__)
+app.config['SWAGGER'] = {'openapi':'3.0.2'}
 Swagger(app, template_file='swagger.yml')
 
 # Define a list of valid API keys
