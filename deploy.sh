@@ -12,8 +12,10 @@ passwordSecretName="password"
 
 # Resource Group and Deployment Variables
 resourceGroup="flaskapp"
-containerRegistry="flaskapp123"
-webAppName="flaskapp123"
+containerRegistry="flaskappcontainer"
+webAppName="flaskappwebapp"
+webAppServicePlan="webplan"
+image="flaskapp"
 
 # Retrieve Service Principal Secrets from Key Vault
 echo "Retrieving Service Principal Secrets from Azure Key Vault..."
@@ -45,7 +47,7 @@ if [ $? -ne 0 ]; then
 fi
 
 # Build the image in Azure Container Registry
-az acr build --resource-group $resourceGroup --registry $containerRegistry --image flaskapp:latest .
+az acr build --resource-group $resourceGroup --registry $containerRegistry --image $image:latest .
 if [ $? -ne 0 ]; then
     echo "Failed to build the image in Azure Container Registry."
     exit 1
@@ -54,16 +56,16 @@ fi
 # Deploy to web app to azure
 
 ## Create App Service plan
-az appservice plan create --name webplan --resource-group $resourceGroup --sku B1 --is-linux
+az appservice plan create --name $webAppServicePlan --resource-group $resourceGroup --sku B1 --is-linux
 if [ $? -ne 0 ]; then
     echo "Failed to create the App Service plan."
     exit 1
 fi
 # Use $appId and $password in your deployment process
 # Deploy to web app in Azure Container Registry
-az webapp create --resource-group $resourceGroup --plan webplan --name $webAppName \
+az webapp create --resource-group $resourceGroup --plan $webAppServicePlan --name $webAppName \
     --docker-registry-server-password $password --docker-registry-server-user $appId \
-    --role acrpull --deployment-container-image-name $containerRegistry.azurecr.io/flaskapp:latest
+    --role acrpull --deployment-container-image-name $containerRegistry.azurecr.io/$image:latest
 if [ $? -ne 0 ]; then
     echo "Failed to deploy the web app to Azure."
     exit 1
