@@ -14,7 +14,7 @@ passwordSecretName="password"
 resourceGroup="flaskapp"
 containerRegistry="flaskappcontainer"
 webAppName="flaskappwebapp"
-webAppServicePlan="webplan"
+webAppServicePlan="flaskappwebplan"
 image="flaskapp"
 
 # Retrieve Service Principal Secrets from Key Vault
