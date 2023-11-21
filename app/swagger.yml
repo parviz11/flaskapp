@@ -13,6 +13,12 @@ tags:
   - name: health
     description: Application health check
     
+  - name: protected
+    description: Protected routes
+    
+  - name: login
+    description: User authentication
+    
   - name: predict
     description: Predict scores
 
@@ -33,6 +39,58 @@ paths:
                   status:
                     type: string
                     description: The health status of the application.
+  /protected:
+    get:
+      tags:
+        - protected
+      summary: Protected Endpoint
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: A JSON response indicating the logged-in user.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  logged_in_as:
+                    type: string
+                    description: The username of the logged-in user.
+  
+  /login:
+    post:
+      tags:
+        - login
+      summary: User Authentication
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                username:
+                  type: string
+                  description: The username for authentication.
+                password:
+                  type: string
+                  description: The password for authentication.
+              required:
+                - username
+                - password
+      responses:
+        '200':
+          description: A JSON response containing the access token.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  access_token:
+                    type: string
+                    description: The JWT access token.
+
   /predict:
     post:
       tags:
@@ -68,6 +126,39 @@ paths:
                   prediction:
                     type: array
                     description: The predicted probabilities
+
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    description: The error message indicating unauthorized access.
+
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    description: The error message indicating bad request.
+
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    description: The error message indicating internal server error.
 components:
   schemas:
     Predict:

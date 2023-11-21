@@ -2,4 +2,5 @@
 .ipynb_checkpoints/
 app_test.ipynb
 .ipynb_checkpoints/API_request-checkpoint.ipynb
-config.env
+deploy/config.env
+app/.env

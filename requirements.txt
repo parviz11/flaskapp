@@ -6,3 +6,5 @@ numpy
 flask
 gunicorn
 flasgger
+Flask-JWT-Extended
+python-dotenv
