@@ -34,17 +34,9 @@ def health_check():
     # Return a 200 OK response if the app is healthy
     return jsonify({"status": "healthy"})
 
-# Example route requiring JWT authentication
-@app.route('/protected', methods=['GET'])
-@jwt_required()
-def protected():
-    # Access the identity of the current user with get_jwt_identity
-    current_user = get_jwt_identity()
-    return jsonify(logged_in_as=current_user), 200
-
-# Move authentication logic to a separate function or class method
+# Authentication function
 def authenticate_user(username, password):
-    # Replace this with your actual authentication logic
+    # Simple authentication method
     if username == 'admin' and password == 'admin':
         return True
     else:
@@ -84,6 +76,9 @@ def predict():
         jsonify: A JSON response containing the prediction result.
     """
     try:
+        # Check if the API key is included in the request headers
+        api_key = request.headers.get('Authorization', '').split('Bearer ')[-1]
+
         # Access the identity of the current user with get_jwt_identity
         current_user = get_jwt_identity()
 

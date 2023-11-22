@@ -13,9 +13,6 @@ tags:
   - name: health
     description: Application health check
     
-  - name: protected
-    description: Protected routes
-    
   - name: login
     description: User authentication
     
@@ -39,25 +36,7 @@ paths:
                   status:
                     type: string
                     description: The health status of the application.
-  /protected:
-    get:
-      tags:
-        - protected
-      summary: Protected Endpoint
-      security:
-        - bearerAuth: []
-      responses:
-        '200':
-          description: A JSON response indicating the logged-in user.
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  logged_in_as:
-                    type: string
-                    description: The username of the logged-in user.
-  
+   
   /login:
     post:
       tags:
@@ -96,13 +75,22 @@ paths:
       tags:
         - predict
       summary: Make Predictions
-      description: Enter a valid API key to access the API.
+      description: |- 
+        Enter a valid API key to access the API. 
+        Enter the API key by clicking "Authorize" button on the top right corner of the screen.
+        Add API key in this format [Bearer jwt_token]. Replace jwt_token with the 
+        API key that you obtain when you log in. Keep "Bearer" in the beginning. 
+        
+        Example value: Bearer koasdkoajiajsfoa_737naksfjd
       parameters:
-        - name: X-API-Key
+        - name: Authorization
           in: header
-          required: true
+          required: false
           schema:
             type: string
+            
+      security:
+        - JWT: []
       requestBody:
         required: true
         content:
@@ -160,6 +148,11 @@ paths:
                     type: string
                     description: The error message indicating internal server error.
 components:
+  securitySchemes:
+    JWT:
+      type: apiKey
+      in: header
+      name: Authorization
   schemas:
     Predict:
       type: object
