@@ -36,7 +36,16 @@ def health_check():
 
 # Authentication function
 def authenticate_user(username, password):
-    # Simple authentication method
+    """
+    Simple authentication method.
+
+    Args:
+        username (str): The username.
+        password (str): The password.
+
+    Returns:
+        bool: True if authentication is successful, False otherwise.
+    """
     if username == 'admin' and password == 'admin':
         return True
     else:
@@ -51,11 +60,11 @@ def login():
         jsonify: A JSON response containing the access token.
     """
     try:
-        # Add your authentication logic here (e.g., check credentials)
+        # Authenticate
         username = request.json.get('username')
         password = request.json.get('password')
 
-        # Replace this with your actual authentication logic
+        # Check if username-password are correct
         if authenticate_user(username, password):
             # Create JWT token with user identity
             access_token = create_access_token(identity=username)
