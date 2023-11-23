@@ -1,7 +1,9 @@
 #!/bin/bash
 
 # Source the login script
-source login.sh
+source deploy/login.sh
+
+start_date_time=$(date)
 
 echo "Successfully logged in."
 
@@ -9,6 +11,11 @@ echo "Successfully logged in."
 keyVaultName="flaskappkeys"
 appIdSecretName="appID"
 passwordSecretName="password"
+
+# App login and API token
+jwtSecretName="jwtsecretkey"
+apiloginUserName="apiloginuser"
+apiloginPass="apiloginpass"
 
 # Resource Group and Deployment Variables
 resourceGroup="flaskapp"
@@ -26,11 +33,32 @@ if [ -z "$appId" ]; then
     echo "Failed to retrieve App ID from Key Vault."
     exit 1
 fi
-
+echo "Retrieved appID"
 # Retrieve Password from Key Vault
 password=$(az keyvault secret show --vault-name $keyVaultName --name $passwordSecretName --query "value" --output tsv)
 if [ -z "$password" ]; then
     echo "Failed to retrieve Password from Key Vault."
+    exit 1
+fi
+echo "Retrieved pass"
+# Retrieve API token initial value
+jwtsecret=$(az keyvault secret show --vault-name $keyVaultName --name $jwtSecretName --query "value" --output tsv)
+if [ -z "$jwtsecret" ]; then
+    echo "Failed to retrieve JWT Secret Key from Key Vault."
+    exit 1
+fi
+
+# Retrieve API username
+apiuser=$(az keyvault secret show --vault-name $keyVaultName --name $apiloginUserName --query "value" --output tsv)
+if [ -z "$apiuser" ]; then
+    echo "Failed to retrieve API user name from Key Vault."
+    exit 1
+fi
+
+# Retrieve API pass
+apipass=$(az keyvault secret show --vault-name $keyVaultName --name $apiloginPass --query "value" --output tsv)
+if [ -z "$apipass" ]; then
+    echo "Failed to retrieve API password from Key Vault."
     exit 1
 fi
 
@@ -65,10 +93,17 @@ fi
 # Deploy to web app in Azure Container Registry
 az webapp create --resource-group $resourceGroup --plan $webAppServicePlan --name $webAppName \
     --docker-registry-server-password $password --docker-registry-server-user $appId \
-    --role acrpull --deployment-container-image-name $containerRegistry.azurecr.io/$image:latest
+    --role acrpull --deployment-container-image-name $containerRegistry.azurecr.io/$image:latest \
+    
 if [ $? -ne 0 ]; then
     echo "Failed to deploy the web app to Azure."
     exit 1
 fi
 
+az webapp config appsettings set --resource-group $resourceGroup --name $webAppName \
+    --settings JWT_SECRET_KEY=$jwtsecret JWT_ACCESS_TOKEN_EXPIRES=6000 APP_USERNAME=$apiuser APP_PASSWORD=$apipass
+
 echo "Web app deployed successfully."
+
+end_date_time=$(date)
+echo "Process started at $start_date_time and finished at $end_date_time"

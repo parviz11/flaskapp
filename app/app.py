@@ -7,7 +7,12 @@ from dotenv import load_dotenv
 import os
 
 # Load environment variables from .env
-load_dotenv()
+'''
+This is only useful in development. In production do not use this method.
+Instead, store secrets and tokens as environment variables in the 
+deployment environment, e.g., Azure App Service.
+'''
+#load_dotenv()
 
 app = Flask(__name__)
 app.config['SWAGGER'] = {'openapi':'3.0.2'}
@@ -46,7 +51,7 @@ def authenticate_user(username, password):
     Returns:
         bool: True if authentication is successful, False otherwise.
     """
-    if username == 'admin' and password == 'admin':
+    if username == os.getenv('APP_USERNAME') and password == os.getenv('APP_PASSWORD'):
         return True
     else:
         return False

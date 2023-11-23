@@ -17,4 +17,8 @@ az keyvault secret set --vault-name flaskappkeys --name password --value <enter_
 
 az keyvault secret set --vault-name flaskappkeys --name tenant --value <enter_value_here>
 
+az keyvault secret set --vault-name flaskappkeys --name jwtsecretkey --value <enter_value_here>
 
+az keyvault secret set --vault-name flaskappkeys --name apiloginuser --value <enter_value_here>
+
+az keyvault secret set --vault-name flaskappkeys --name apiloginpass --value <enter_value_here>

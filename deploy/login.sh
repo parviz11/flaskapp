@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Load configuration from file
-source config.env
+source deploy/config.env
 
 # Set the default subscription
 az account set --subscription $AZURE_SUBSCRIPTION_ID
