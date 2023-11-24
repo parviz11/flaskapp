@@ -56,8 +56,9 @@ JWT_ACCESS_TOKEN_EXPIRES=600  # Set your desired expiration time in seconds
 # Run model locally with Docker
 
 
-# Deploy model on Azure
+# Deploy single container app on Azure
 
+# Deploy a multi-container group using Docker Compose
 
 # To partly automate the deployment to Azure
 
