@@ -4,3 +4,4 @@ app_test.ipynb
 .ipynb_checkpoints/API_request-checkpoint.ipynb
 deploy/config.env
 app/.env
+test_app.py

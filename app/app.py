@@ -12,7 +12,7 @@ This is only useful in development. In production do not use this method.
 Instead, store secrets and tokens as environment variables in the 
 deployment environment, e.g., Azure App Service.
 '''
-#load_dotenv()
+load_dotenv()
 
 app = Flask(__name__)
 app.config['SWAGGER'] = {'openapi':'3.0.2'}
