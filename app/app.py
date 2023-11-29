@@ -5,6 +5,7 @@ from flasgger import Swagger
 from flask_jwt_extended import JWTManager, jwt_required, create_access_token, get_jwt_identity
 from dotenv import load_dotenv
 import os
+import json
 
 # Load environment variables from .env
 '''
@@ -27,6 +28,26 @@ Swagger(app, template_file='swagger.yml')
 with open("app/model/lg_pipeline.pkl", "rb") as model_file:
     model = pickle.load(model_file)
 model_file.close()
+
+# Load column types.
+'''
+It is important to specify column types because when
+a client sends request to /predict endpoint
+they take a row of a pandas data frame and convert
+it to json format. /predict endpoint then takes
+this json formatted data and converts it to Python
+dictionary. Thereafter, pandas DataFrame method is 
+applied to convert the dictionary to data frame. At
+this point, the information about column dtypes are
+lost and sklearn Pipeline might not work as expected.
+
+Note. Check if it is possible to apply this logic in
+the Pipeline. If yes, remove this block and corresponding
+part of the code in /predict method below.
+'''
+with open("app/data/col_dtypes.json", "r") as columns_file:
+    column_data_types = json.load(columns_file)
+columns_file.close()
 
 @app.route('/health', methods=['GET'])
 def health_check():
@@ -102,7 +123,7 @@ def predict():
             return jsonify({"error": "Invalid JSON data received."}), 400
 
         # Convert the received data into a DataFrame
-        input_data = pd.DataFrame(data, index=[0])
+        input_data = pd.DataFrame(data, index=[0]).astype(column_data_types)
 
         # Make predictions using scikit-learn model
         prediction = model.predict_proba(input_data)
