@@ -5,3 +5,5 @@ app_test.ipynb
 deploy/config.env
 app/.env
 test_app.py
+API_request.ipynb
+app_test.ipynb
