@@ -6,3 +6,4 @@ deploy/config.env
 app/.env
 test_app.py
 API_request.ipynb
+j_notebooks/
