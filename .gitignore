@@ -1,7 +1,7 @@
 .DS_Store
 .ipynb_checkpoints/
 app_test.ipynb
-.ipynb_checkpoints/API_request-checkpoint.ipynb
+.ipynb_checkpoints/
 deploy/config.env
 app/.env
 test_app.py
