@@ -23,7 +23,7 @@ Swagger(app, template_file='swagger.yml')
 
 
 # Load the trained model
-with open("app/model/lg_pipeline.pkl", "rb") as model_file:
+with open("app/model/lg_pipeline_v1_0.pkl", "rb") as model_file:
     model = pickle.load(model_file)
 model_file.close()
 
