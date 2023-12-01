@@ -1,11 +1,9 @@
 from flask import Flask, request, jsonify
-import pickle
+import pickle, os, json
 import pandas as pd
 from flasgger import Swagger
 from flask_jwt_extended import JWTManager, jwt_required, create_access_token, get_jwt_identity
 from dotenv import load_dotenv
-import os
-import json
 
 # Load environment variables from .env
 '''
