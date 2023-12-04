@@ -1,5 +1,5 @@
 from flask import Flask, request, jsonify
-import pickle, os, json
+import pickle, os, json, bcrypt
 import pandas as pd
 from flasgger import Swagger
 from flask_jwt_extended import JWTManager, jwt_required, create_access_token, get_jwt_identity
@@ -70,7 +70,11 @@ def authenticate_user(username, password):
     Returns:
         bool: True if authentication is successful, False otherwise.
     """
-    if username == os.getenv('APP_USERNAME') and password == os.getenv('APP_PASSWORD'):
+    # Retrieve the hashed version of the password
+    stored_password_hash = os.getenv('APP_PASSWORD_HASH').encode('utf-8')
+
+    # Hash entered password and check agains the retrieved hashed value
+    if username == os.getenv('APP_USERNAME') and bcrypt.checkpw(password.encode('utf-8'), stored_password_hash):
         return True
     else:
         return False

@@ -8,3 +8,4 @@ gunicorn
 flasgger
 Flask-JWT-Extended
 python-dotenv # To read env file from local directory. For dev and test purposes.
+bcrypt

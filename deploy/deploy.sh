@@ -16,6 +16,7 @@ passwordSecretName="password"
 jwtSecretName="jwtsecretkey"
 apiloginUserName="apiloginuser"
 apiloginPass="apiloginpass"
+apiloginpassHash="apiloginpasshash"
 
 # Resource Group and Deployment Variables
 resourceGroup="flaskapp"
@@ -55,12 +56,24 @@ if [ -z "$apiuser" ]; then
     exit 1
 fi
 
+
+# Retrieve API pass hash
+
+apipasshash=$(az keyvault secret show --vault-name $keyVaultName --name $apiloginpassHash --query "value" --output tsv)
+if [ -z "$apipasshash" ]; then
+    echo "Failed to retrieve API password from Key Vault."
+    exit 1
+fi
+
+
 # Retrieve API pass
+'''
 apipass=$(az keyvault secret show --vault-name $keyVaultName --name $apiloginPass --query "value" --output tsv)
 if [ -z "$apipass" ]; then
     echo "Failed to retrieve API password from Key Vault."
     exit 1
 fi
+'''
 
 # Continue with your deployment using the retrieved secrets
 echo "Successfully retrieved Service Principal Secrets."
@@ -101,7 +114,7 @@ if [ $? -ne 0 ]; then
 fi
 
 az webapp config appsettings set --resource-group $resourceGroup --name $webAppName \
-    --settings JWT_SECRET_KEY=$jwtsecret JWT_ACCESS_TOKEN_EXPIRES=6000 APP_USERNAME=$apiuser APP_PASSWORD=$apipass
+    --settings JWT_SECRET_KEY=$jwtsecret JWT_ACCESS_TOKEN_EXPIRES=6000 APP_USERNAME=$apiuser APP_PASSWORD_HASH=$apipasshash
 
 echo "Web app deployed successfully."
 
