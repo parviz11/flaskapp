@@ -2,9 +2,9 @@
 
 # Create a service principal:
 
-https://learn.microsoft.com/en-us/cli/azure/azure-cli-sp-tutorial-1?wt.mc_id=searchAPI_azureportal_inproduct_rmskilling&sessionId=f33f851cbe534e7baffbaa995c43d967&tabs=bash
+https://learn.microsoft.com/en-us/cli/azure/azure-cli-sp-tutorial-1?tabs=bash
 
-az ad sp create-for-rbac --name FlaskAppServicePrincipal --role owner --scopes /subscriptions/7042d442-20cf-482e-a116-829030f5d23e/resourceGroups/flaskapp
+az ad sp create-for-rbac --name FlaskAppServicePrincipal --role owner --scopes /subscriptions/<value>/resourceGroups/flaskapp
 
 # Create Key vault to store service principal credentials.
 
