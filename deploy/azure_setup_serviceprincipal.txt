@@ -4,7 +4,13 @@
 
 https://learn.microsoft.com/en-us/cli/azure/azure-cli-sp-tutorial-1?tabs=bash
 
-az ad sp create-for-rbac --name FlaskAppServicePrincipal --role owner --scopes /subscriptions/<value>/resourceGroups/flaskapp
+az ad sp create-for-rbac --name FlaskAppServicePrincipal --role contributor --scopes /subscriptions/<value>/resourceGroups/<value>
+
+# Assign Key Vault Secrets Officer role using Azure RBAC
+az role assignment create --role "Key Vault Secrets Officer" --assignee $servicePrincipalAppId --scope /subscriptions/<value>/resourceGroups/flaskapp/providers/Microsoft.KeyVault/vaults/$keyVaultName
+
+# Login with service principal credentials
+az login --service-principal --username <value> --password <value> --tenant <value>
 
 # Create Key vault to store service principal credentials.
 
