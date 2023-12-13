@@ -1,4 +1,4 @@
-# First create a resource group from Azure Portal
+# First create a resource group from Azure Portal or with Azure CLI
 
 # Create a service principal:
 

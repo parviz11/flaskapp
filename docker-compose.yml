@@ -5,17 +5,20 @@ services:
   flask_app:
     build: 
       context: . # Dockerfile is located in the same directory as docker-compose.yml
+    image: flaskappcontainer.azurecr.io/flask-app
+    container_name: flask-app
     ports:
-      - "8000:8000"
+      - "6379:6379"
     networks:
       - app_network
 
   nginx:
-    image: nginx:latest
+    image: mcr.microsoft.com/cbl-mariner/base/nginx:1 # this image is specific to Azure. Perhaps use nginx:latest for other platforms
+    container_name: nginx
     ports:
       - "80:80"
     volumes:
-      - ./nginx/scoringapp.conf:/etc/nginx/conf.d/default.conf # Mount the Nginx config directory
+      - ./nginx/scoringapp.conf:/etc/nginx/conf.d/default.conf # Mount the Nginx config directory ${WEBAPP_STORAGE_HOME} is specific to Azure
     depends_on:
       - flask_app
     networks:
