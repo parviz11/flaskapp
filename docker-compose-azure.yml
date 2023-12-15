@@ -1,0 +1,27 @@
+# docker-compose-azure.yml
+version: '3.8'
+
+services:
+  flask_app:
+    image: flaskappcontainer.azurecr.io/flaskapp:latest
+    container_name: flask-app
+    ports:
+      - "8080:8080"
+    networks:
+      - app_network
+
+  nginx:
+    image: flaskappcontainer.azurecr.io/nginx:latest # this image is specific to Azure. Perhaps use nginx:latest for other platforms
+    container_name: nginx
+    ports:
+      - "80:80"
+    depends_on:
+      - flask_app
+    networks:
+      - app_network
+    command: ["nginx", "-g", "daemon off;"]
+
+networks:
+  app_network:
+    driver: bridge
+
