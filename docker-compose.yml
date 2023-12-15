@@ -13,7 +13,7 @@ services:
       - app_network
 
   nginx:
-    image: mcr.microsoft.com/cbl-mariner/base/nginx:1 # this image is specific to Azure. Perhaps use nginx:latest for other platforms
+    image: nginx:latest # this image is specific to Azure. Perhaps use nginx:latest for other platforms
     container_name: nginx
     ports:
       - "80:80"
