@@ -8,7 +8,7 @@ services:
     image: flaskappcontainer.azurecr.io/flask-app
     container_name: flask-app
     ports:
-      - "6379:6379"
+      - "8080:8080"
     networks:
       - app_network
 
