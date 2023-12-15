@@ -1,5 +1,5 @@
 # Use an official Python runtime as a parent image. bookworm or bullseye tags indicate Debian.
-FROM python:3.12.0-bookworm
+FROM python:3.12.0
 
 # Set the working directory to /code
 WORKDIR /code
