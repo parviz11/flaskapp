@@ -5,30 +5,37 @@ This is a simple Flask app that demonstrates how to deploy a trained ML model to
 # File tree
 
 
-* [.ipynb_checkpoints/](./flaskapp/.ipynb_checkpoints)
-  * [API_request-checkpoint.ipynb](./flaskapp/.ipynb_checkpoints/API_request-checkpoint.ipynb)
-  * [app_test-checkpoint.ipynb](./flaskapp/.ipynb_checkpoints/app_test-checkpoint.ipynb)
 * [app/](./flaskapp/app)
   * [data/](./flaskapp/app/data)
+    * [col_dtypes.json](./flaskapp/app/data/col_dtypes.json)
     * [dataset.csv](./flaskapp/app/data/dataset.csv)
   * [model/](./flaskapp/app/model)
-    * [lg_pipeline.pkl](./flaskapp/app/model/lg_pipeline.pkl)
-  * [.env](./flaskapp/app/.env)
+    * [lg_pipeline_v1_0.pkl](./flaskapp/app/model/lg_pipeline_v1_0.pkl)
+    * [lg_pipeline_v1_1.pkl](./flaskapp/app/model/lg_pipeline_v1_1.pkl)
   * [app.py](./flaskapp/app/app.py)
   * [gunicorn.conf.py](./flaskapp/app/gunicorn.conf.py)
   * [swagger.yml](./flaskapp/app/swagger.yml)
 * [deploy/](./flaskapp/deploy)
   * [azure_setup_serviceprincipal.txt](./flaskapp/deploy/azure_setup_serviceprincipal.txt)
-  * [config.env](./flaskapp/deploy/config.env)
   * [config_file_format.md](./flaskapp/deploy/config_file_format.md)
   * [deploy.sh](./flaskapp/deploy/deploy.sh)
+  * [deploy_multi_container_app.sh](./flaskapp/deploy/deploy_multi_container_app.sh)
   * [login.sh](./flaskapp/deploy/login.sh)
+* [nginx/](./flaskapp/nginx)
+  * [Dockerfile](./flaskapp/nginx/Dockerfile)
+  * [scoringapp.conf](./flaskapp/nginx/scoringapp.conf)
+* [tests/](./flaskapp/tests)
+  * [Azure/](./flaskapp/tests/Azure)
+    * [Metrics.png](./flaskapp/tests/Azure/Metrics.png)
+  * [local_deployment/](./flaskapp/tests/local_deployment)
+    * [Docker.png](./flaskapp/tests/local_deployment/Docker.png)
+    * [Postman.png](./flaskapp/tests/local_deployment/Postman.png)
 * [.dockerignore](./flaskapp/.dockerignore)
 * [.gitignore](./flaskapp/.gitignore)
-* [API_request.ipynb](./flaskapp/API_request.ipynb)
 * [Dockerfile](./flaskapp/Dockerfile)
 * [README.md](./flaskapp/README.md)
-* [app_test.ipynb](./flaskapp/app_test.ipynb)
+* [docker-compose-azure.yml](./flaskapp/docker-compose-azure.yml)
+* [docker-compose.yml](./flaskapp/docker-compose.yml)
 * [requirements.txt](./flaskapp/requirements.txt)
 * [startup.sh](./flaskapp/startup.sh)
 
@@ -61,7 +68,10 @@ JWT_ACCESS_TOKEN_EXPIRES=600  # Set your desired expiration time in seconds
 
 To begin, go to Azure portal and create a resource group. Then create [Service Principal](https://learn.microsoft.com/en-us/cli/azure/azure-cli-sp-tutorial-1?tabs=bash) and Azure Key Vault. Next, assign Key Vault Secrets Officer role using Azure RBAC and login with service principal credentials. Store your secrets in Azure Key Vault. You will need to log in with your Service Principal and retrieve the secrets to further use them in your app's environment configuration. This is one of secure ways of working with secrets (e.g., username, password, token etc.). 
 
- [!IMPORTANT] For CLI commands, refer to [./deploy/azure_setup_serviceprincipal.txt](https://github.com/parviz11/flaskapp/blob/main/deploy/azure_setup_serviceprincipal.txt) file.
+<aside style="background-color: #0B7E56; border-left: 6px solid #009900; padding: 10px; margin: 10px 0;">
+  💡<strong>Important:</strong> For CLI commands, refer to <a href="https://github.com/parviz11/flaskapp/blob/main/deploy/azure_setup_serviceprincipal.txt">./deploy/azure_setup_serviceprincipal.txt</a> file.
+</aside>
+
 
 Create `config.env` file and store these parameters in it:
 
@@ -76,13 +86,18 @@ Once you have completed setting up resources and configurations you are ready to
 
 # Deploy single container app on Azure
 
+Use [./deploy/deploy.sh](https://github.com/parviz11/flaskapp/blob/main/deploy/deploy.sh) script to deploy on Azure. The script does the followings:
 
+* Logs in to your Azure account by using `./deploy/login.sh` script
+* Retrieves secrets from Azure Key Vault
+* Creates Azure Container Registry (ACR) resource
+* Builds a container image in ACR by using Dockerfile in the root directory
+* Creates App Service Plan
+* Creates App Service, pulls the image from ACR and runs in the App Service
+* Adds secrets as environment variables in App Service.
+
+Not that it might take some time to finish the deployment after running the script. You can monitor the deployment process by navigating to Azure App Service > Deployment center > Logs.
 
 # Deploy a multi-container group using Docker Compose
 
-# To partly automate the deployment to Azure
 
-- Create Azure Service Principal
-- Store appID and secret in Azure key vault
-- Store appID and secret locally in config.env file (do not share this in public repository)
-- Run deploy.sh file
