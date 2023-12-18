@@ -73,10 +73,12 @@ To begin, go to Azure portal and create a resource group. Then create [Service P
 
 Create `config.env` file and store these parameters in it:
 
+```
 AZURE_SUBSCRIPTION_ID=<value>
 AZURE_TENANT_ID=<value>
 AZURE_CLIENT_ID=<value>
 AZURE_CLIENT_SECRET=<value>
+```
 
 You can obtain these values when you create Service Principal.
 Do not store `config.env` file in a public repository. 
@@ -84,7 +86,8 @@ Once you have completed setting up resources and configurations you are ready to
 
 # Deploy single container app on Azure
 
-Use [./deploy/deploy.sh](https://github.com/parviz11/flaskapp/blob/main/deploy/deploy.sh) script to deploy on Azure. The script does the followings:
+Use [./deploy/deploy.sh](https://github.com/parviz11/flaskapp/blob/main/deploy/deploy.sh) script to deploy on Azure. In bash, run the script by typing: `bash ./deploy/deploy.sh`. <br>
+The script does the followings:
 
 * Logs in to your Azure account by using `./deploy/login.sh` script
 * Retrieves secrets from Azure Key Vault
@@ -107,5 +110,5 @@ Use [./deploy/deploy_multi_container_app.sh](https://github.com/parviz11/flaskap
   * For Flask app, builds a container image in ACR by using Dockerfile in the root directory
   * For `nginx`, builds a container image in ACR by using Dockerfile in `./nginx/Dockerfile`
 * Creates App Service Plan
-* Creates App Service, instructs the App Service to build multicontainer app by using `docker-compose-azure.yml` file. This pulls the images from ACR and run them in the App Service.
+* Creates App Service, instructs the App Service to build multicontainer app by using `docker-compose-azure.yml` file. This pulls the images from ACR and runs them in the App Service.
 * Adds secrets as environment variables in App Service.
