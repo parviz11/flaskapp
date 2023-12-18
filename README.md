@@ -72,6 +72,8 @@ To begin, go to Azure portal and create a resource group. Then create [Service P
   💡<strong>Important:</strong> For CLI commands, refer to <a href="https://github.com/parviz11/flaskapp/blob/main/deploy/azure_setup_serviceprincipal.txt">./deploy/azure_setup_serviceprincipal.txt</a> file.
 </aside>
 
+> [!IMPORTANT]  
+> Crucial information necessary for users to succeed.
 
 Create `config.env` file and store these parameters in it:
 
@@ -100,4 +102,5 @@ Not that it might take some time to finish the deployment after running the scri
 
 # Deploy a multi-container group using Docker Compose
 
+Use [./deploy/deploy.sh](https://github.com/parviz11/flaskapp/blob/main/deploy/deploy.sh) script to deploy on Azure. The script does the followings:
 
