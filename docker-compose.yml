@@ -5,7 +5,6 @@ services:
   flask_app:
     build: 
       context: . # Dockerfile is located in the same directory as docker-compose.yml
-    image: flaskappcontainer.azurecr.io/flask-app
     container_name: flask-app
     ports:
       - "8080:8080"
