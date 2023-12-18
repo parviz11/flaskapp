@@ -66,15 +66,6 @@ if [ -z "$apipasshash" ]; then
 fi
 
 
-# Retrieve API pass
-'''
-apipass=$(az keyvault secret show --vault-name $keyVaultName --name $apiloginPass --query "value" --output tsv)
-if [ -z "$apipass" ]; then
-    echo "Failed to retrieve API password from Key Vault."
-    exit 1
-fi
-'''
-
 # Continue with your deployment using the retrieved secrets
 echo "Successfully retrieved Service Principal Secrets."
 echo "App ID: $appId"
