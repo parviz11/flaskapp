@@ -68,10 +68,6 @@ JWT_ACCESS_TOKEN_EXPIRES=600  # Set your desired expiration time in seconds
 
 To begin, go to Azure portal and create a resource group. Then create [Service Principal](https://learn.microsoft.com/en-us/cli/azure/azure-cli-sp-tutorial-1?tabs=bash) and Azure Key Vault. Next, assign Key Vault Secrets Officer role using Azure RBAC and login with service principal credentials. Store your secrets in Azure Key Vault. You will need to log in with your Service Principal and retrieve the secrets to further use them in your app's environment configuration. This is one of secure ways of working with secrets (e.g., username, password, token etc.). 
 
-<aside style="background-color: #0B7E56; border-left: 6px solid #009900; padding: 10px; margin: 10px 0;">
-  💡<strong>Important:</strong> For CLI commands, refer to <a href="https://github.com/parviz11/flaskapp/blob/main/deploy/azure_setup_serviceprincipal.txt">./deploy/azure_setup_serviceprincipal.txt</a> file.
-</aside>
-
 > [!IMPORTANT]  
 > For CLI commands, refer to [./deploy/azure_setup_serviceprincipal.txt](https://github.com/parviz11/flaskapp/blob/main/deploy/azure_setup_serviceprincipal.txt)
 
@@ -98,9 +94,18 @@ Use [./deploy/deploy.sh](https://github.com/parviz11/flaskapp/blob/main/deploy/d
 * Creates App Service, pulls the image from ACR and runs in the App Service
 * Adds secrets as environment variables in App Service.
 
-Not that it might take some time to finish the deployment after running the script. You can monitor the deployment process by navigating to Azure App Service > Deployment center > Logs.
+Note that it might take some time to finish the deployment after running the script. You can monitor the deployment process by navigating to Azure App Service > Deployment center > Logs.
 
 # Deploy a multi-container group using Docker Compose
 
-Use [./deploy/deploy.sh](https://github.com/parviz11/flaskapp/blob/main/deploy/deploy.sh) script to deploy on Azure. The script does the followings:
+Use [./deploy/deploy_multi_container_app.sh](https://github.com/parviz11/flaskapp/blob/main/deploy/deploy_multi_container_app.sh) script to deploy on Azure. The script does the followings:
 
+* Logs in to your Azure account by using `./deploy/login.sh` script
+* Retrieves secrets from Azure Key Vault
+* Creates Azure Container Registry (ACR) resource
+* Container images:
+  * For Flask app, builds a container image in ACR by using Dockerfile in the root directory
+  * For `nginx`, builds a container image in ACR by using Dockerfile in `./nginx/Dockerfile`
+* Creates App Service Plan
+* Creates App Service, instructs the App Service to build multicontainer app by using `docker-compose-azure.yml` file. This pulls the images from ACR and run them in the App Service.
+* Adds secrets as environment variables in App Service.
