@@ -73,7 +73,7 @@ To begin, go to Azure portal and create a resource group. Then create [Service P
 </aside>
 
 > [!IMPORTANT]  
-> Crucial information necessary for users to succeed.
+> For CLI commands, refer to [./deploy/azure_setup_serviceprincipal.txt](https://github.com/parviz11/flaskapp/blob/main/deploy/azure_setup_serviceprincipal.txt)
 
 Create `config.env` file and store these parameters in it:
 
