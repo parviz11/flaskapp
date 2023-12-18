@@ -4,40 +4,43 @@ This is a simple Flask app that demonstrates how to deploy a trained ML model to
 
 # File tree
 
+- [app/](https://github.com/parviz11/flaskapp/tree/main/app)
+  - [data/](https://github.com/parviz11/flaskapp/tree/main/app/data)
+    - [col_dtypes.json](https://github.com/parviz11/flaskapp/blob/main/app/data/col_dtypes.json)
+    - [dataset.csv](https://github.com/parviz11/flaskapp/blob/main/app/data/dataset.csv)
+  - [model/](https://github.com/parviz11/flaskapp/tree/main/app/model)
+    - [lg_pipeline_v1_0.pkl](https://github.com/parviz11/flaskapp/blob/main/app/model/lg_pipeline_v1_0.pkl)
+    - [lg_pipeline_v1_1.pkl](https://github.com/parviz11/flaskapp/blob/main/app/model/lg_pipeline_v1_1.pkl)
+  - [app.py](https://github.com/parviz11/flaskapp/blob/main/app/app.py)
+  - [gunicorn.conf.py](https://github.com/parviz11/flaskapp/blob/main/app/gunicorn.conf.py)
+  - [swagger.yml](https://github.com/parviz11/flaskapp/blob/main/app/swagger.yml)
 
-* [app/](./flaskapp/app)
-  * [data/](./flaskapp/app/data)
-    * [col_dtypes.json](./flaskapp/app/data/col_dtypes.json)
-    * [dataset.csv](./flaskapp/app/data/dataset.csv)
-  * [model/](./flaskapp/app/model)
-    * [lg_pipeline_v1_0.pkl](./flaskapp/app/model/lg_pipeline_v1_0.pkl)
-    * [lg_pipeline_v1_1.pkl](./flaskapp/app/model/lg_pipeline_v1_1.pkl)
-  * [app.py](./flaskapp/app/app.py)
-  * [gunicorn.conf.py](./flaskapp/app/gunicorn.conf.py)
-  * [swagger.yml](./flaskapp/app/swagger.yml)
-* [deploy/](./flaskapp/deploy)
-  * [azure_setup_serviceprincipal.txt](./flaskapp/deploy/azure_setup_serviceprincipal.txt)
-  * [config_file_format.md](./flaskapp/deploy/config_file_format.md)
-  * [deploy.sh](./flaskapp/deploy/deploy.sh)
-  * [deploy_multi_container_app.sh](./flaskapp/deploy/deploy_multi_container_app.sh)
-  * [login.sh](./flaskapp/deploy/login.sh)
-* [nginx/](./flaskapp/nginx)
-  * [Dockerfile](./flaskapp/nginx/Dockerfile)
-  * [scoringapp.conf](./flaskapp/nginx/scoringapp.conf)
-* [tests/](./flaskapp/tests)
-  * [Azure/](./flaskapp/tests/Azure)
-    * [Metrics.png](./flaskapp/tests/Azure/Metrics.png)
-  * [local_deployment/](./flaskapp/tests/local_deployment)
-    * [Docker.png](./flaskapp/tests/local_deployment/Docker.png)
-    * [Postman.png](./flaskapp/tests/local_deployment/Postman.png)
-* [.dockerignore](./flaskapp/.dockerignore)
-* [.gitignore](./flaskapp/.gitignore)
-* [Dockerfile](./flaskapp/Dockerfile)
-* [README.md](./flaskapp/README.md)
-* [docker-compose-azure.yml](./flaskapp/docker-compose-azure.yml)
-* [docker-compose.yml](./flaskapp/docker-compose.yml)
-* [requirements.txt](./flaskapp/requirements.txt)
-* [startup.sh](./flaskapp/startup.sh)
+- [deploy/](https://github.com/parviz11/flaskapp/tree/main/deploy)
+  - [azure_setup_serviceprincipal.txt](https://github.com/parviz11/flaskapp/blob/main/deploy/azure_setup_serviceprincipal.txt)
+  - [config_file_format.md](https://github.com/parviz11/flaskapp/blob/main/deploy/config_file_format.md)
+  - [deploy.sh](https://github.com/parviz11/flaskapp/blob/main/deploy/deploy.sh)
+  - [deploy_multi_container_app.sh](https://github.com/parviz11/flaskapp/blob/main/deploy/deploy_multi_container_app.sh)
+  - [login.sh](https://github.com/parviz11/flaskapp/blob/main/deploy/login.sh)
+
+- [nginx/](https://github.com/parviz11/flaskapp/tree/main/nginx)
+  - [Dockerfile](https://github.com/parviz11/flaskapp/blob/main/nginx/Dockerfile)
+  - [scoringapp.conf](https://github.com/parviz11/flaskapp/blob/main/nginx/scoringapp.conf)
+
+- [tests/](https://github.com/parviz11/flaskapp/tree/main/tests)
+  - [Azure/](https://github.com/parviz11/flaskapp/tree/main/tests/Azure)
+    - [Metrics.png](https://github.com/parviz11/flaskapp/blob/main/tests/Azure/Metrics.png)
+  - [local_deployment/](https://github.com/parviz11/flaskapp/tree/main/tests/local_deployment)
+    - [Docker.png](https://github.com/parviz11/flaskapp/blob/main/tests/local_deployment/Docker.png)
+    - [Postman.png](https://github.com/parviz11/flaskapp/blob/main/tests/local_deployment/Postman.png)
+
+- [.dockerignore](https://github.com/parviz11/flaskapp/blob/main/.dockerignore)
+- [.gitignore](https://github.com/parviz11/flaskapp/blob/main/.gitignore)
+- [Dockerfile](https://github.com/parviz11/flaskapp/blob/main/Dockerfile)
+- [README.md](https://github.com/parviz11/flaskapp/blob/main/README.md)
+- [docker-compose-azure.yml](https://github.com/parviz11/flaskapp/blob/main/docker-compose-azure.yml)
+- [docker-compose.yml](https://github.com/parviz11/flaskapp/blob/main/docker-compose.yml)
+- [requirements.txt](https://github.com/parviz11/flaskapp/blob/main/requirements.txt)
+
 
 
 # app directory
@@ -112,3 +115,6 @@ Use [./deploy/deploy_multi_container_app.sh](https://github.com/parviz11/flaskap
 * Creates App Service Plan
 * Creates App Service, instructs the App Service to build multicontainer app by using `docker-compose-azure.yml` file. This pulls the images from ACR and runs them in the App Service.
 * Adds secrets as environment variables in App Service.
+
+
+# Logging

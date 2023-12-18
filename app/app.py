@@ -23,8 +23,8 @@ jwt = JWTManager(app)
 Swagger(app, template_file='swagger.yml')
 
 # Configure Loguru
-log_file_path = "logs/app.log"
-logger.add(log_file_path, rotation="500 MB", level="INFO") # rotate files > 500Mb and write logs min level='INFO'
+log_file_path = "https://flaskappstorage.blob.core.windows.net/logs/app.log"
+logger.add(log_file_path, rotation="500 MB", compression="zip", level="INFO") # rotate files > 500Mb and write logs min level='INFO'
 
 
 # Load the trained model
