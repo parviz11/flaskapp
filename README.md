@@ -55,8 +55,28 @@ JWT_ACCESS_TOKEN_EXPIRES=600  # Set your desired expiration time in seconds
 
 # Run model locally with Docker
 
+`docker-compose -f docker-compose.yml up`
+
+# Set up
+
+To begin, go to Azure portal and create a resource group. Then create [Service Principal](https://learn.microsoft.com/en-us/cli/azure/azure-cli-sp-tutorial-1?tabs=bash) and Azure Key Vault. Next, assign Key Vault Secrets Officer role using Azure RBAC and login with service principal credentials. Store your secrets in Azure Key Vault. You will need to log in with your Service Principal and retrieve the secrets to further use them in your app's environment configuration. This is one of secure ways of working with secrets (e.g., username, password, token etc.). 
+
+ [!IMPORTANT] For CLI commands, refer to [./deploy/azure_setup_serviceprincipal.txt](https://github.com/parviz11/flaskapp/blob/main/deploy/azure_setup_serviceprincipal.txt) file.
+
+Create `config.env` file and store these parameters in it:
+
+AZURE_SUBSCRIPTION_ID=<value>
+AZURE_TENANT_ID=<value>
+AZURE_CLIENT_ID=<value>
+AZURE_CLIENT_SECRET=<value>
+
+You can obtain these values when you create Service Principal.
+Do not store `config.env` file in a public repository. 
+Once you have completed setting up resources and configurations you are ready to deploy the app.
 
 # Deploy single container app on Azure
+
+
 
 # Deploy a multi-container group using Docker Compose
 
