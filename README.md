@@ -61,7 +61,8 @@ load_dotenv()
 JWT_SECRET_KEY=some_random_token #Random token
 JWT_ACCESS_TOKEN_EXPIRES=600  # Set your desired expiration time in seconds
 ```
-> **_NOTE:_** Do not include `.env` file in the public repository such as GitHub. Add `.env` in `.gitignore` file to make sure that it will not be accidentally pushed to a public repository.
+> [!NOTE] 
+> Do not include `.env` file in the public repository such as GitHub. Add `.env` in `.gitignore` file to make sure that it will not be accidentally pushed to a public repository.
 
 # Run model locally with Docker
 
