@@ -5,6 +5,7 @@ from flasgger import Swagger
 from flask_jwt_extended import JWTManager, jwt_required, create_access_token, get_jwt_identity
 from dotenv import load_dotenv
 from loguru import logger
+from azure.storage.blob import BlobServiceClient
 
 # Load environment variables from .env
 '''
@@ -23,8 +24,41 @@ jwt = JWTManager(app)
 Swagger(app, template_file='swagger.yml')
 
 # Configure Loguru
-log_file_path = "https://flaskappstorage.blob.core.windows.net/logs/app.log"
-logger.add(log_file_path, rotation="500 MB", compression="zip", level="INFO") # rotate files > 500Mb and write logs min level='INFO'
+azure_storage_account_key = os.getenv('AZURE_STORAGE_ACCOUNT_KEY')
+# Connection string for Azure Storage
+connection_string = "DefaultEndpointsProtocol=https;AccountName=flaskappstorage;AccountKey="+azure_storage_account_key+";EndpointSuffix=core.windows.net"
+
+# Container and file names
+container_name = "logs"
+file_name = "app.log"
+
+# Construct the log file path
+log_file_path = f"{connection_string};ContainerName={container_name};BlobName={file_name}"
+
+try:
+    # Loguru startup message
+    logger.info("Loguru is initializing.")
+
+    # Configure Loguru
+    logger.add(log_file_path, rotation="500 MB", compression="zip", level="INFO") # rotate files > 500Mb and write logs min level='INFO'
+
+    # Additional log statement
+    logger.info("Loguru setup completed.")
+
+    # Create a BlobServiceClient
+    blob_service_client = BlobServiceClient.from_connection_string(connection_string)
+
+    # Get a reference to a container
+    container_client = blob_service_client.get_container_client(container_name)
+
+    # Upload the log file to Azure Blob Storage
+    with open("app/app.log", "rb") as data:
+        container_client.upload_blob(name=file_name, data=data)
+        
+except Exception as e:
+    # Log any configuration errors
+    logger.error(f"Loguru configuration error: {str(e)}")
+
 
 
 # Load the trained model
