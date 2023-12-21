@@ -119,3 +119,9 @@ Use [./deploy/deploy_multi_container_app.sh](https://github.com/parviz11/flaskap
 
 
 # Logging
+If needed, configure customized logging for the app. The logs for all containers (Linux/custom containers) can be downloaded through the following link: <br>
+`https://<app-name>.scm.azurewebsites.net/api/logs/docker/zip`. 
+For this specific exercise, I have used `loguru` library.
+
+# Security
+Azure has various security services for Azure App Service. For more info navigate to this page: https://learn.microsoft.com/en-us/azure/app-service/overview-security
