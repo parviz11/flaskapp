@@ -3,8 +3,11 @@ import pickle, os, json, bcrypt
 import pandas as pd
 from flasgger import Swagger
 from flask_jwt_extended import JWTManager, jwt_required, create_access_token, get_jwt_identity
-#from dotenv import load_dotenv
+from dotenv import load_dotenv
 from loguru import logger
+from app.data.data_validation import PredictionInput
+import pydantic
+from pydantic import ValidationError
 
 # Load environment variables from .env
 '''
@@ -12,7 +15,7 @@ This is only useful in development. In production do not use this method.
 Instead, store secrets and tokens as environment variables in the 
 deployment environment, e.g., Azure App Service.
 '''
-#load_dotenv()
+load_dotenv()
 
 app = Flask(__name__)
 app.config['SWAGGER'] = {'openapi':'3.0.2'}
@@ -22,9 +25,9 @@ app.config['JWT_ACCESS_TOKEN_EXPIRES'] = int(os.getenv('JWT_ACCESS_TOKEN_EXPIRES
 jwt = JWTManager(app)
 Swagger(app, template_file='swagger.yml')
 
-# Configure Loguru
-log_file_path = "logs/app.log"
-logger.add(log_file_path, rotation="500 MB", level="INFO") # rotate files > 500Mb and write logs min level='INFO'
+# Configure Loguru to write logs to SQLite database
+db_path = "logs/app_logs.db"
+logger.add(f"sqlite:///{db_path}", format="{time} {level} {message}", rotation="500 MB", level="INFO") # rotate files > 500Mb and write logs min level='INFO'
 
 # Load the trained model
 with open("app/model/lg_pipeline_v1_0.pkl", "rb") as model_file:
@@ -140,11 +143,33 @@ def predict():
             logger.warning("Invalid JSON data received in /predict")
             return jsonify({"error": "Invalid JSON data received."}), 400
 
-        # Convert the received data into a DataFrame
-        input_data = pd.DataFrame(data, index=[0]).astype(column_data_types)
+        try:
+            # Validate input data using Pydantic model
+            input_data = PredictionInput(**data)
+        except ValidationError as e:
+            # Log the detailed validation errors
+            logger.warning(f"Invalid input data received in /predict: {e.errors()}")
+            logger.warning(f"Original data received: {data}")
+
+            # Create a list to store custom error messages
+            error_messages = []
+
+            # Iterate through validation errors and extract information
+            for error in e.errors():
+                field = error['loc'][0] if error['loc'] else 'unknown'
+                msg = error['msg']
+                error_messages.append(f"Invalid value for '{field}': {msg}")
+
+
+            return jsonify({"error": f"Invalid input data: {', '.join(error_messages)}"}), 400
+
+        # Access individual validated fields like input_data.uuid, input_data.default, etc.
+
+        # Convert the validated data into a DataFrame if needed
+        input_dataframe = pd.DataFrame(input_data.dict(), index=[0])
 
         # Make predictions using scikit-learn model
-        prediction = model.predict_proba(input_data)
+        prediction = model.predict_proba(input_dataframe)
 
         logger.info(f"Prediction made for user: {current_user}")
         return jsonify({"prediction": prediction.tolist(), "user": current_user})
